@@ -1,37 +1,4 @@
 {
-    "behat/behat": {
-        "version": "v3.4.3"
-    },
-    "behat/gherkin": {
-        "version": "v4.5.1"
-    },
-    "behat/mink": {
-        "version": "v1.7.1"
-    },
-    "behat/mink-browserkit-driver": {
-        "version": "1.3.x-dev"
-    },
-    "behat/mink-extension": {
-        "version": "2.3.1"
-    },
-    "behat/symfony2-extension": {
-        "version": "2.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "2.1",
-            "ref": "6b63fb76d3bb2dd16098f12adf6d6ca844e21862"
-        }
-    },
-    "behat/transliterator": {
-        "version": "v1.2.0"
-    },
-    "behatch/contexts": {
-        "version": "3.1.0"
-    },
-    "container-interop/container-interop": {
-        "version": "1.2.0"
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -131,11 +98,23 @@
             "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
         }
     },
-    "justinrainbow/json-schema": {
-        "version": "5.2.7"
-    },
     "liip/functional-test-bundle": {
         "version": "2.0.0-alpha4"
+    },
+    "lstrojny/functional-php": {
+        "version": "1.7.0"
+    },
+    "mark-gerarts/auto-mapper-plus": {
+        "version": "1.2.1"
+    },
+    "mark-gerarts/automapper-plus-bundle": {
+        "version": "v1.0.2"
+    },
+    "moneyphp/money": {
+        "version": "v3.1.3"
+    },
+    "monolog/monolog": {
+        "version": "1.23.0"
     },
     "nikic/php-parser": {
         "version": "v4.0.1"
@@ -188,9 +167,6 @@
     "symfony/cache": {
         "version": "v4.0.8"
     },
-    "symfony/class-loader": {
-        "version": "v3.4.8"
-    },
     "symfony/config": {
         "version": "v4.0.8"
     },
@@ -204,7 +180,7 @@
         }
     },
     "symfony/css-selector": {
-        "version": "v3.4.8"
+        "version": "v4.0.8"
     },
     "symfony/debug": {
         "version": "v4.0.8"
@@ -257,6 +233,9 @@
     "symfony/inflector": {
         "version": "v4.0.8"
     },
+    "symfony/intl": {
+        "version": "v4.0.8"
+    },
     "symfony/lts": {
         "version": "4-dev"
     },
@@ -269,8 +248,35 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/monolog-bridge": {
+        "version": "v4.0.8"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.1",
+            "ref": "371d1a2b69984710646b09a1182ef1d4308c904f"
+        }
+    },
+    "symfony/options-resolver": {
+        "version": "v4.0.8"
+    },
     "symfony/orm-pack": {
         "version": "v1.0.5"
+    },
+    "symfony/phpunit-bridge": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "179470cb6492db92dffee208cfdb436f175c93b4"
+        }
+    },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.7.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.7.0"
@@ -313,6 +319,9 @@
     },
     "symfony/templating": {
         "version": "v4.0.8"
+    },
+    "symfony/test-pack": {
+        "version": "v1.0.1"
     },
     "symfony/translation": {
         "version": "3.3",
