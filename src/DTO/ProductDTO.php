@@ -2,9 +2,13 @@
 
 namespace App\DTO;
 
+use App\Validator\UniqueProductTitle;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @UniqueProductTitle()
+ */
 class ProductDTO
 {
     /**

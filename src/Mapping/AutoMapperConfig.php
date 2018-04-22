@@ -17,6 +17,7 @@ class AutoMapperConfig implements AutoMapperConfiguratorInterface
     {
         $addAccessor = new MutatorPropertyAccessor();
         $addAccessor->setSetterPrefix("add");
+        $addAccessor->setIgnoreNulls(true);
 
         $config->registerMapping(PriceDTO::class, Price::class)
             ->reverseMap();

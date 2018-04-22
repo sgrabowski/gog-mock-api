@@ -29,4 +29,11 @@ class ProductManager implements ProductManagerInterface
 
         return $this->mapper->map($product, ProductDTO::class);
     }
+
+    public function exists(ProductDTO $productDTO): bool
+    {
+        return $this->em->getRepository(Product::class)->findOneBy([
+            'title' => $productDTO->title
+        ]) !== null;
+    }
 }

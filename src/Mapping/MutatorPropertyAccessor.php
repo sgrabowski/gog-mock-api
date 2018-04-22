@@ -8,6 +8,7 @@ use Doctrine\Common\Inflector\Inflector;
 class MutatorPropertyAccessor extends PropertyAccessor
 {
     private $setterPrefix = "set";
+    private $ignoreNulls = false;
 
     /**
      * @param string $setterPrefix
@@ -17,15 +18,25 @@ class MutatorPropertyAccessor extends PropertyAccessor
         $this->setterPrefix = $setterPrefix;
     }
 
+    /**
+     * @param bool $ignoreNulls
+     */
+    public function setIgnoreNulls(bool $ignoreNulls): void
+    {
+        $this->ignoreNulls = $ignoreNulls;
+    }
+
     public function setProperty($object, string $propertyName, $value): void
     {
         if ($this->hasSetter($object, $propertyName)) {
 
             if(is_array($value) || $value instanceof \Traversable) {
                 foreach ($value as $item) {
+                    if($this->ignoreNulls && $value === null) continue;
                     $object->{$this->resolveMethodName($propertyName)}($item);
                 }
             } else {
+                if($this->ignoreNulls && $value === null) return;
                 $object->{$this->resolveMethodName($propertyName)}($value);
             }
 

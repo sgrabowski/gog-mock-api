@@ -102,4 +102,57 @@ EOF;
         $this->assertContains("required", $validationErrors["prices[0].currency"], true);
         $this->assertContains("required", $validationErrors["prices[0].amount"], true);
     }
+
+    /**
+     * @test
+     */
+    public function create_without_prices()
+    {
+        $this->loadFixtures([]);
+        $client = $this->makeClient();
+
+        $content = <<<EOF
+        {
+            "title": "Fallout"
+        }
+EOF;
+
+        $client->request("POST", "/products", [], [], [], $content);
+
+        $this->assertStatusCode(201, $client);
+    }
+
+    /**
+     * @test
+     */
+    public function create_name_collision()
+    {
+        $this->loadFixtures([
+            ProductFixtures::class
+        ]);
+
+        $client = $this->makeClient();
+
+        $content = <<<EOF
+        {
+            "title": "Fallout"
+        }
+EOF;
+
+        $client->request("POST", "/products", [], [], [], $content);
+
+        $this->assertStatusCode(400, $client);
+
+        $response = $client->getResponse();
+        $responseBody = $response->getContent();
+
+        $this->assertJson($responseBody);
+
+        $responseJson = json_decode($responseBody, true);
+        $this->assertArrayHasKey("validationErrors", $responseJson);
+
+        $validationErrors = $responseJson["validationErrors"];
+        $this->assertArrayHasKey("title", $validationErrors);
+        $this->assertContains('Product "Fallout" already exists', $validationErrors["title"], true);
+    }
 }
