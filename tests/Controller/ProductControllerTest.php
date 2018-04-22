@@ -389,4 +389,40 @@ EOF;
         $prices = $product['prices'];
         $this->assertCount(2, $prices);
     }
+
+    //tests for product listing
+
+    /**
+     * @test
+     */
+    public function listing_pagination()
+    {
+        $client = $this->makeClient();
+        $client->request("GET", "/products");
+
+        $this->assertStatusCode(200, $client);
+
+        $responseBody = $client->getResponse()->getContent();
+        $this->assertJson($responseBody);
+        $productList = json_decode($responseBody, true);
+
+        $this->assertCount(3, $productList);
+
+        $client->request("GET", "/products?page=2");
+
+        $this->assertStatusCode(200, $client);
+
+        $responseBody = $client->getResponse()->getContent();
+        $this->assertJson($responseBody);
+        $productList = json_decode($responseBody, true);
+
+        $this->assertCount(2, $productList);
+
+        //test invalid pages
+        $client->request("GET", "/products?page=3");
+        $this->assertStatusCode(404, $client);
+
+        $client->request("GET", "/products?page=-1");
+        $this->assertStatusCode(400, $client);
+    }
 }

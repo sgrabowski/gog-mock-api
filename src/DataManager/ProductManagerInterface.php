@@ -6,6 +6,7 @@ use App\DTO\AbstractProductDTO;
 use App\DTO\PriceDTO;
 use App\DTO\ProductDTO;
 use App\DTO\UpdateProductDTO;
+use App\Pagination\PaginatorInterface;
 
 interface ProductManagerInterface
 {
@@ -55,4 +56,11 @@ interface ProductManagerInterface
      * @throws ObjectNotFoundException
      */
     public function setPrice($id, PriceDTO $priceDTO): ProductDTO;
+
+    /**
+     * Creates a paginator for product list
+     *
+     * @return PaginatorInterface
+     */
+    public function getPaginator(int $page, int $limit): PaginatorInterface;
 }
