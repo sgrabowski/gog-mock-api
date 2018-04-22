@@ -2,8 +2,10 @@
 
 namespace App\Mapping;
 
+use App\DTO\CartDTO;
 use App\DTO\PriceDTO;
 use App\DTO\ProductDTO;
+use App\Entity\Cart;
 use App\Entity\Price;
 use App\Entity\Product;
 use AutoMapperPlus\AutoMapperInterface;
@@ -29,5 +31,7 @@ class AutoMapperConfig implements AutoMapperConfiguratorInterface
 
         $config->registerMapping(Product::class, ProductDTO::class)
             ->forMember("prices", Operation::mapTo(PriceDTO::class));
+
+        $config->registerMapping(Cart::class, CartDTO::class);
     }
 }
