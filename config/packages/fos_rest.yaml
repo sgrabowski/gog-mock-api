@@ -1,0 +1,20 @@
+fos_rest:
+    param_fetcher_listener: force
+    body_listener: true
+    format_listener:
+        enabled: true
+        rules:
+            - { path: '^/', priorities: ['json'], fallback_format: 'json' }
+    view:
+        view_response_listener: 'force'
+    serializer:
+        serialize_null: true
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors
+    exception:
+        enabled: true
+        exception_controller: 'fos_rest.exception.controller:showAction'
+        messages:
+            Symfony\Component\HttpKernel\Exception\BadRequestHttpException: true
