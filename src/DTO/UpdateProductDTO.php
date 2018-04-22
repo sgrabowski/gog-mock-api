@@ -9,17 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @UniqueProductTitle()
  */
-class ProductDTO extends AbstractProductDTO
+class UpdateProductDTO extends AbstractProductDTO
 {
     /**
      * @Serializer\Type("string")
-     * @Assert\NotBlank(message="Title is required")
      */
     public $title;
-
-    /**
-     * @Serializer\Type("array<App\DTO\PriceDTO>")
-     * @Assert\Valid()
-     */
-    public $prices;
 }

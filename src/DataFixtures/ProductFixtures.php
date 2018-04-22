@@ -44,5 +44,7 @@ class ProductFixtures extends Fixture
         $manager->persist($youdied);
 
         $manager->flush();
+
+        $this->setReference("fallout", $fallout);
     }
 }

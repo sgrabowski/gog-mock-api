@@ -3,7 +3,7 @@
 namespace App\Validator;
 
 use App\DataManager\ProductManagerInterface;
-use App\DTO\ProductDTO;
+use App\DTO\AbstractProductDTO;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -22,8 +22,9 @@ class UniqueProductTitleValidator extends ConstraintValidator
         if (!$constraint instanceof UniqueProductTitle) {
             throw new UnexpectedTypeException($constraint, UniqueProductTitle::class);
         }
-        if (!$value instanceof ProductDTO) {
-            throw new UnexpectedTypeException($value, ProductDTO::class);
+
+        if (!$value instanceof AbstractProductDTO) {
+            throw new UnexpectedTypeException($value, AbstractProductDTO::class);
         }
 
         if($this->productManager->exists($value)) {

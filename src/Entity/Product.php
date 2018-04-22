@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -77,6 +78,20 @@ class Product
                 $price->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function replacePrice(Price $price): self
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("currency", $price->getCurrency()));
+        $existing = $this->prices->matching($criteria);
+
+        foreach ($existing as $oldPrice) {
+            $this->removePrice($oldPrice);
+        }
+
+        $this->addPrice($price);
 
         return $this;
     }
