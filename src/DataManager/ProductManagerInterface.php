@@ -27,6 +27,26 @@ interface ProductManagerInterface
     public function exists(AbstractProductDTO $productDTO): bool;
 
     /**
+     * Finds a product by it's id
+     * Returns only products with prices in $currency
+     *
+     * @param $id
+     * @return ProductDTO
+     * @throws ProductNotFoundException
+     */
+    public function find($id, $currency): ProductDTO;
+
+    /**
+     * Finds multiple products
+     * Returns only products with prices in $currency
+     *
+     * @param array $ids
+     * @return array|ProductDTO[]
+     * @throws ProductNotFoundException
+     */
+    public function findMultiple(array $ids, $currency);
+
+    /**
      * Updates the product
      * Only non-null values are taken into account when updating object
      *

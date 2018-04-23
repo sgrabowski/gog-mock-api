@@ -4,6 +4,7 @@ namespace App\DataManager\Doctrine;
 
 use App\DataManager\ObjectNotFoundException;
 use App\DataManager\ProductManagerInterface;
+use App\DataManager\ProductNotFoundException;
 use App\DTO\AbstractProductDTO;
 use App\DTO\PriceDTO;
 use App\DTO\ProductDTO;
@@ -41,9 +42,7 @@ class ProductManager implements ProductManagerInterface
 
     public function exists(AbstractProductDTO $productDTO): bool
     {
-        return $this->repo->findOneBy([
-                'title' => $productDTO->title
-            ]) !== null;
+        return $this->repo->findOneByDTO($productDTO) !== null;
     }
 
     public function update($id, UpdateProductDTO $updateProductDTO): ProductDTO
@@ -108,6 +107,7 @@ class ProductManager implements ProductManagerInterface
      * Creates a paginator for product list
      *
      * @return PaginatorInterface
+     * @throws \App\Pagination\PageNotFoundException
      */
     public function getPaginator(int $page, int $limit): PaginatorInterface
     {
@@ -116,5 +116,46 @@ class ProductManager implements ProductManagerInterface
         $paginator->setCurrentPage($page);
 
         return $paginator;
+    }
+
+    /**
+     * Finds a product by it's id
+     *
+     * @param $id
+     * @return ProductDTO
+     * @throws ProductNotFoundException
+     */
+    public function find($id, $currency): ProductDTO
+    {
+        $product = $this->repo->findOneWithCurrency($id, $currency);
+
+        if (!$product) {
+            throw new ProductNotFoundException();
+        }
+
+        return $this->mapper->map($product, ProductDTO::class);
+    }
+
+    /**
+     * Finds multiple products
+     *
+     * @param array $ids
+     * @return array|ProductDTO[]
+     * @throws ProductNotFoundException
+     */
+    public function findMultiple(array $ids, $currency)
+    {
+        $results = [];
+        $products = $this->repo->findWithCurrency($ids, $currency);
+
+        if (count($products) != count($ids)) {
+            //@todo: throw exception stating which products were not found
+        }
+
+        foreach ($products as $product) {
+            $results[] = $this->mapper->map($product, ProductDTO::class);
+        }
+
+        return $results;
     }
 }

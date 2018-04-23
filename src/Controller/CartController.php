@@ -10,6 +10,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CartController extends FOSRestController
 {
@@ -37,5 +38,19 @@ class CartController extends FOSRestController
         }
 
         return $this->manager->create($currencyDTO);
+    }
+
+    /**
+     * Add product to the cart
+     *
+     * @Rest\Put("/carts/{cartId}/products/{productId}")
+     * @Rest\View(statusCode=200)
+     * @Rest\QueryParam(name="quantity", requirements=@Assert\GreaterThan(0), default=1, description="page number", strict=true )
+     *
+     * @return CartDTO
+     */
+    public function updateProductAction($cartId, $productId, $quantity)
+    {
+        return $this->manager->setProduct($cartId, $productId, $quantity);
     }
 }

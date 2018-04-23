@@ -2,7 +2,9 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\ProductFixtures;
 use App\Tests\Fixtures\BaseWebTest;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 class CartControllerTest extends BaseWebTest
 {
@@ -31,6 +33,9 @@ EOF;
 
         $this->assertArrayHasKey("id", $cart);
         $this->assertNotEmpty($cart['id']);
+
+        $this->assertArrayHasKey("currency", $cart);
+        $this->assertEquals("USD", $cart['currency']);
     }
 
     /**
@@ -106,5 +111,60 @@ EOF;
         $id2 = $cart['id'];
 
         $this->assertNotEquals($id1, $id2, "Expected different card ids");
+    }
+
+    //tests for adding products
+
+    //test invalid product id, invalid cart id, invalid quantity, more than 3 products
+    protected function createCart(Client $client, $currency = "USD")
+    {
+        $client->request("POST", "/carts", [], [], [], '{"currency":"'.$currency.'"}');
+        return json_decode($client->getResponse()->getContent(), true)['id'];
+    }
+
+    /**
+     * @test
+     */
+    public function update_successful()
+    {
+        $references = $this->loadFixtures([
+            ProductFixtures::class
+        ])->getReferenceRepository();
+
+        $client = $this->makeClient();
+        $cartId = $this->createCart($client);
+        $productId = $references->getReference("fallout")->getId();
+
+        $url = "/carts/".$cartId."/products/".$productId."?quantity=2";
+        $client->request("PUT", $url);
+
+        $this->assertStatusCode(200, $client);
+
+        $responseBody = $client->getResponse()->getContent();
+        $this->assertJson($responseBody);
+        $cart = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey("id", $cart);
+        $this->assertEquals($cartId, $cart['id']);
+
+        $this->assertArrayHasKey("currency", $cart);
+        $this->assertEquals("USD", $cart['currency']);
+
+        $this->assertArrayHasKey("total", $cart);
+        $this->assertEquals("3.98", $cart['total']);
+
+        $this->assertArrayHasKey("products", $cart);
+        $this->assertCount(1, $cart['products']);
+
+        $cartProduct = $cart['products'][0];
+        $this->assertArrayHasKey("product", $cartProduct);
+        $this->assertArrayHasKey("quantity", $cartProduct);
+        $this->assertEquals(2, $cartProduct['quantity']);
+
+        $product = $cartProduct['product'];
+        $this->assertArrayHasKey("id", $product);
+        $this->assertArrayHasKey("title", $product);
+        $this->assertArrayHasKey("prices", $product);
+        $this->assertEquals("Fallout", $product['title']);
     }
 }
