@@ -40,8 +40,11 @@ EOF;
         $this->assertJson($responseBody);
         $product = json_decode($responseBody, true);
 
+        $this->assertArrayHasKey("id", $product);
         $this->assertArrayHasKey("title", $product);
         $this->assertArrayHasKey("prices", $product);
+
+        $this->assertNotEmpty($product['id']);
 
         $this->assertEquals("Monster Hunter World", $product['title']);
         $prices = $product['prices'];

@@ -13,6 +13,12 @@ class ProductDTO extends AbstractProductDTO
 {
     /**
      * @Serializer\Type("string")
+     * @Serializer\ReadOnly()
+     */
+    public $id;
+
+    /**
+     * @Serializer\Type("string")
      * @Assert\NotBlank(message="Title is required")
      */
     public $title;
