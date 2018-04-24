@@ -129,7 +129,7 @@ class ProductController extends FOSRestController
      * @Rest\View(statusCode=200)
      *
      * @Rest\QueryParam(name="page", requirements=@Assert\GreaterThan(0), default=1, description="page number", strict=true )
-     * @Rest\QueryParam(name="limit", requirements=@Assert\Collection({@Assert\GreaterThan(0),@Assert\LessThan(100)}), default=3, description="items per page", strict=true )
+     * @Rest\QueryParam(name="limit", requirements=@Assert\Range(min=0, max=100), default=3, description="items per page", strict=true )
      *
      * @return View
      */
