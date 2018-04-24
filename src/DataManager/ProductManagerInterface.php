@@ -83,4 +83,13 @@ interface ProductManagerInterface
      * @return PaginatorInterface
      */
     public function getPaginator(int $page, int $limit): PaginatorInterface;
+
+    /**
+     * Removes product
+     *
+     * @param $cartId
+     * @param $productId
+     * @return bool True if succesful
+     */
+    public function remove($id): bool;
 }

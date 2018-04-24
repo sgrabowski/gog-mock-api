@@ -51,4 +51,12 @@ interface CartManagerInterface
      * @return CartDTO
      */
     public function removeProduct($cartId, $productId): CartDTO;
+
+    /**
+     * Returns all carts with specified products
+     *
+     * @param array $productIds
+     * @return array|CartDTO[]
+     */
+    public function getCartsContainingProducts(array $productIds);
 }

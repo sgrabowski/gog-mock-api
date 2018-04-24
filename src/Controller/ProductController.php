@@ -146,4 +146,15 @@ class ProductController extends FOSRestController
             "X-pagination-total-pages" => $paginator->getTotalPages()
         ]);
     }
+
+    /**
+     * Deletes a product
+     *
+     * @Rest\Delete("/products/{id}")
+     * @Rest\View(statusCode=204)
+     */
+    public function deleteAction($id)
+    {
+        $this->manager->remove($id);
+    }
 }

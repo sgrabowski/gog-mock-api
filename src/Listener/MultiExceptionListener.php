@@ -2,6 +2,7 @@
 
 namespace App\Listener;
 
+use App\DataManager\DeleteProductInCartException;
 use App\DataManager\FullCartException;
 use App\DataManager\ObjectNotFoundException;
 use App\DataManager\ProductNotFoundException;
@@ -29,6 +30,11 @@ class MultiExceptionListener
 
         if ($exception instanceof FullCartException) {
             $code = 400;
+            $message = $exception->getMessage();
+        }
+
+        if($exception instanceof DeleteProductInCartException) {
+            $code = 409;
             $message = $exception->getMessage();
         }
 

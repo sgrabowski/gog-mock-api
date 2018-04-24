@@ -425,4 +425,71 @@ EOF;
         $client->request("GET", "/products?page=-1");
         $this->assertStatusCode(400, $client);
     }
+
+    //tests for product deletion
+
+    /**
+     * @test
+     */
+    public function delete_successful()
+    {
+        $references = $this->loadFixtures([
+            ProductFixtures::class
+        ])->getReferenceRepository();
+
+        $falloutId = $references->getReference("fallout")->getId();
+
+        $client = $this->makeClient();
+
+        $client->request("DELETE", "/products/" . $falloutId);
+
+        $this->assertStatusCode(204, $client);
+    }
+
+    /**
+     * @test
+     */
+    public function delete_not_found()
+    {
+        $references = $this->loadFixtures([])->getReferenceRepository();
+
+        $client = $this->makeClient();
+
+        $client->request("DELETE", "/products/666");
+
+        $this->assertStatusCode(404, $client);
+    }
+
+    /**
+     * @test
+     */
+    public function delete_item_in_cart_forbid()
+    {
+        $references = $this->loadFixtures([
+            ProductFixtures::class
+        ])->getReferenceRepository();
+
+        $productId = $references->getReference("fallout")->getId();
+
+        $client = $this->makeClient();
+
+        $client->request("POST", "/carts", [], [], [], '{"currency":"USD"}');
+        $cartId = json_decode($client->getResponse()->getContent(), true)['id'];
+
+        $url = "/carts/" . $cartId . "/products/" . $productId;
+        $client->request("PUT", $url);
+
+        $client->request("DELETE", "/products/" . $productId);
+
+        $this->assertStatusCode(409, $client);
+    }
+
+    /**
+     * @test
+     * @todo
+     */
+    public function delete_item_in_cart_force()
+    {
+        $this->markTestIncomplete();
+    }
 }

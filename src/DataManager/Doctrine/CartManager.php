@@ -28,11 +28,19 @@ class CartManager implements CartManagerInterface
     private $repo;
     private $productManager;
 
-    public function __construct(EntityManagerInterface $em, AutoMapperInterface $mapper, ProductManagerInterface $productManager)
+    public function __construct(EntityManagerInterface $em, AutoMapperInterface $mapper)
     {
         $this->em = $em;
         $this->mapper = $mapper;
         $this->repo = $this->em->getRepository(Cart::class);
+    }
+
+    /**
+     * @required
+     * This can't be set in the constructor to avoid circular reference
+     */
+    public function setProductManager(ProductManagerInterface $productManager): void
+    {
         $this->productManager = $productManager;
     }
 
@@ -170,5 +178,18 @@ class CartManager implements CartManagerInterface
         $this->em->refresh($cart);
 
         return $this->mapper->map($cart, CartDTO::class);
+    }
+
+    /**
+     * Returns all carts with specified products
+     *
+     * @param array $productIds
+     * @return @return array|CartDTO[]
+     */
+    public function getCartsContainingProducts(array $productIds)
+    {
+        $carts = $this->repo->findByProductIds($productIds);
+
+        return $this->mapper->mapMultiple($carts, CartDTO::class);
     }
 }

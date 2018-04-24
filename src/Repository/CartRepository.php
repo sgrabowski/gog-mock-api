@@ -19,32 +19,13 @@ class CartRepository extends ServiceEntityRepository
         parent::__construct($registry, Cart::class);
     }
 
-//    /**
-//     * @return Cart[] Returns an array of Cart objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function findByProductIds(array $productIds)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder("p")
+            ->join("p.products", "cp")
+            ->where("cp.productId IN (:productIds)")
+            ->setParameter("productIds", $productIds)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Cart
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
