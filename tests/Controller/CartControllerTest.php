@@ -310,4 +310,34 @@ EOF;
         $this->assertArrayHasKey("prices", $product);
         $this->assertEquals("Fallout", $product['title']);
     }
+
+    /**
+     * @test
+     */
+    public function remove_product()
+    {
+        $references = $this->loadFixtures([
+            ProductFixtures::class
+        ])->getReferenceRepository();
+
+        $client = $this->makeClient();
+        $cartId = $this->createCart($client);
+        $productId = $references->getReference("fallout")->getId();
+
+        $url = "/carts/" . $cartId . "/products/" . $productId;
+        $client->request("PUT", $url);
+
+        $client->request("DELETE", $url);
+        $this->assertStatusCode(200, $client);
+
+        $responseBody = $client->getResponse()->getContent();
+        $this->assertJson($responseBody);
+        $cart = json_decode($responseBody, true);
+
+        $this->assertArrayHasKey("total", $cart);
+        $this->assertEquals("0.00", $cart['total']);
+
+        $this->assertArrayHasKey("products", $cart);
+        $this->assertCount(0, $cart['products']);
+    }
 }

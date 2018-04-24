@@ -143,4 +143,32 @@ class CartManager implements CartManagerInterface
 
         return $this->mapper->map($cart, CartDTO::class);
     }
+
+    /**
+     * Removes product from the cart
+     *
+     * Currently this method will NOT throw an exception if the product doesn't exist, because
+     * the desired outcome (lack of such product in the cart) is achieved anyway
+     *
+     * @param $cartId
+     * @param $productId
+     * @return CartDTO
+     */
+    public function removeProduct($cartId, $productId): CartDTO
+    {
+        /* @var $cart Cart */
+        $cart = $this->repo->find($cartId);
+
+        if ($cart === null) {
+            throw new ObjectNotFoundException(sprintf("Cart with id %s doesn't exist", $cartId));
+        }
+
+        $cart->removeProductById($productId);
+
+        $this->em->persist($cart);
+        $this->em->flush();
+        $this->em->refresh($cart);
+
+        return $this->mapper->map($cart, CartDTO::class);
+    }
 }

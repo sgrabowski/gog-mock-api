@@ -42,4 +42,13 @@ interface CartManagerInterface
      * @return CartDTO
      */
     public function find($id): CartDTO;
+
+    /**
+     * Removes product from the cart
+     *
+     * @param $cartId
+     * @param $productId
+     * @return CartDTO
+     */
+    public function removeProduct($cartId, $productId): CartDTO;
 }

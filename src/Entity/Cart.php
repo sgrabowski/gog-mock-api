@@ -88,4 +88,16 @@ class Cart
 
         return $this;
     }
+
+    public function removeProductById($productId): self
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("productId", $productId));
+        $toRemove = $this->products->matching($criteria);
+
+        foreach ($toRemove as $cartProduct) {
+            $this->removeProduct($cartProduct);
+        }
+
+        return $this;
+    }
 }

@@ -45,7 +45,7 @@ class CartController extends FOSRestController
      *
      * @Rest\Put("/carts/{cartId}/products/{productId}")
      * @Rest\View(statusCode=200)
-     * @Rest\QueryParam(name="quantity", requirements=@Assert\Range(min=0, max=10), default=1, description="page number", strict=true )
+     * @Rest\QueryParam(name="quantity", requirements=@Assert\Range(min=1, max=10), default=1, description="page number", strict=true )
      *
      * @return CartDTO
      */
@@ -65,5 +65,18 @@ class CartController extends FOSRestController
     public function getAction($cartId)
     {
         return $this->manager->find($cartId);
+    }
+
+    /**
+     * Remove product the cart
+     *
+     * @Rest\Delete("/carts/{cartId}/products/{productId}")
+     * @Rest\View(statusCode=200)
+     *
+     * @return CartDTO
+     */
+    public function deleteAction($cartId, $productId)
+    {
+        return $this->manager->removeProduct($cartId, $productId);
     }
 }
