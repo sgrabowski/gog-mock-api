@@ -30,3 +30,17 @@ services:
     App\Listener\ValidationExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    App\Listener\MultiExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+#
+#    App\DataManager\ProductManagerInterface:
+#        lazy: true
+#        autowire: true
+#        autoconfigure: true
+#
+#    App\DataManager\CartManagerInterface:
+#        lazy: true
+#        autowire: true
+#        autoconfigure: true

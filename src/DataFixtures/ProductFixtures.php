@@ -46,5 +46,9 @@ class ProductFixtures extends Fixture
         $manager->flush();
 
         $this->setReference("fallout", $fallout);
+        $this->setReference("bloodborne", $youdied);
+        $this->setReference("dontstarve", $dontstarve);
+        $this->setReference("baldursgate", $bgate);
+        $this->setReference("icewinddale", $idale);
     }
 }
