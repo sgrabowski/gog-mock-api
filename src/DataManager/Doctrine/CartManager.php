@@ -3,7 +3,10 @@
 namespace App\DataManager\Doctrine;
 
 use App\DataManager\CartManagerInterface;
+use App\DataManager\FullCartException;
+use App\DataManager\ObjectNotFoundException;
 use App\DataManager\ProductManagerInterface;
+use App\DataManager\ProductNotFoundException;
 use App\DTO\CartDTO;
 use App\DTO\CurrencyDTO;
 use App\DTO\ProductDTO;
@@ -23,6 +26,8 @@ class CartManager implements CartManagerInterface
     private $mapper;
     private $repo;
     private $productManager;
+
+    const ITEMS_LIMIT = 3;
 
     public function __construct(EntityManagerInterface $em, AutoMapperInterface $mapper, ProductManagerInterface $productManager)
     {
@@ -64,14 +69,19 @@ class CartManager implements CartManagerInterface
         $cart = $this->repo->find($cartId);
 
         if ($cart === null) {
-            throw new ObjectNotFoundException();
+            throw new ObjectNotFoundException(sprintf("Cart with id %s doesn't exist", $cartId));
+        }
+
+        //@todo: move this check out to an abstract class
+        if($cart->getProducts()->count() >= self::ITEMS_LIMIT) {
+            throw new FullCartException($cartId, $productId);
         }
 
         $productDTO = new ProductDTO();
         $productDTO->id = $productId;
 
         if(!$this->productManager->exists($productDTO)) {
-            throw new \InvalidArgumentException(sprintf("Product with id %s doesn't exist", $productId));
+            throw new ProductNotFoundException(sprintf("Product with id %s doesn't exist", $productId));
         }
 
         $cartProduct = new CartProduct();

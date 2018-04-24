@@ -45,7 +45,7 @@ class CartController extends FOSRestController
      *
      * @Rest\Put("/carts/{cartId}/products/{productId}")
      * @Rest\View(statusCode=200)
-     * @Rest\QueryParam(name="quantity", requirements=@Assert\GreaterThan(0), default=1, description="page number", strict=true )
+     * @Rest\QueryParam(name="quantity", requirements=@Assert\Range(min=0, max=10), default=1, description="page number", strict=true )
      *
      * @return CartDTO
      */
