@@ -53,4 +53,17 @@ class CartController extends FOSRestController
     {
         return $this->manager->setProduct($cartId, $productId, $quantity);
     }
+
+    /**
+     * Get cart info
+     *
+     * @Rest\Get("/carts/{cartId}")
+     * @Rest\View(statusCode=200)
+     *
+     * @return CartDTO
+     */
+    public function getAction($cartId)
+    {
+        return $this->manager->find($cartId);
+    }
 }

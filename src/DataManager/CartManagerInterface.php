@@ -34,4 +34,12 @@ interface CartManagerInterface
      * @return CartDTO
      */
     public function getCartTotal(CartDTO $cartDTO);
+
+    /**
+     * Finds a cart by id
+     *
+     * @param $id
+     * @return CartDTO
+     */
+    public function find($id): CartDTO;
 }

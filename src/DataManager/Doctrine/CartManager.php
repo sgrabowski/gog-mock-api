@@ -22,12 +22,11 @@ use Money\Parser\DecimalMoneyParser;
 
 class CartManager implements CartManagerInterface
 {
+    const ITEMS_LIMIT = 3;
     private $em;
     private $mapper;
     private $repo;
     private $productManager;
-
-    const ITEMS_LIMIT = 3;
 
     public function __construct(EntityManagerInterface $em, AutoMapperInterface $mapper, ProductManagerInterface $productManager)
     {
@@ -73,14 +72,14 @@ class CartManager implements CartManagerInterface
         }
 
         //@todo: move this check out to an abstract class
-        if($cart->getProducts()->count() >= self::ITEMS_LIMIT) {
+        if ($cart->getProducts()->count() >= self::ITEMS_LIMIT) {
             throw new FullCartException($cartId, $productId);
         }
 
         $productDTO = new ProductDTO();
         $productDTO->id = $productId;
 
-        if(!$this->productManager->exists($productDTO)) {
+        if (!$this->productManager->exists($productDTO)) {
             throw new ProductNotFoundException(sprintf("Product with id %s doesn't exist", $productId));
         }
 
@@ -114,7 +113,7 @@ class CartManager implements CartManagerInterface
         foreach ($cartDTO->products as $cartProductDTO) {
             $productDTO = $cartProductDTO->product;
 
-            if(empty($productDTO->prices) || $productDTO->prices[0]->currency != $cartDTO->currency) {
+            if (empty($productDTO->prices) || $productDTO->prices[0]->currency != $cartDTO->currency) {
                 throw new \LogicException(sprintf("Cart %s contains products with either no price or price in different currency than cart's currency", $cartDTO->id));
             }
 
@@ -124,5 +123,24 @@ class CartManager implements CartManagerInterface
         }
 
         return $moneyFormatter->format($total);
+    }
+
+    /**
+     * Finds a cart by id
+     *
+     * @param $id
+     * @return CartDTO
+     * @throws ObjectNotFoundException
+     */
+    public function find($id): CartDTO
+    {
+        /* @var $cart Cart */
+        $cart = $this->repo->find($id);
+
+        if ($cart === null) {
+            throw new ObjectNotFoundException(sprintf("Cart with id %s doesn't exist", $cartId));
+        }
+
+        return $this->mapper->map($cart, CartDTO::class);
     }
 }
