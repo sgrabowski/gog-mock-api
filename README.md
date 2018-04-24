@@ -1,9 +1,13 @@
 # GOG coding exercise
-Setup:
+#### Setup:
 `composer install`
 
-To run tests:
-`bin/phpunit`
+#### To run tests:
 
-Manually load fixtures into dev env:
+```cp phpunit.xml.dist phpunit.xml```
+
+```bin/phpunit```
+
+#### Load fixtures for manual testing:
+Edit your `.env` file and
 `bin/console doctrine:fixtures:load`
